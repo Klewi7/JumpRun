@@ -12,8 +12,8 @@ class Sprite {
     private BufferedImage image;
 
     public Sprite(String imageName) throws IOException {
-        URL trumpUrl = getClass().getResource("../images/" + imageName);
-        image = ImageIO.read(trumpUrl);
+        URL imageUrl = getClass().getResource("../images/" + imageName);
+        image = ImageIO.read(imageUrl);
     }
     public BufferedImage getImage() {
         return image;
