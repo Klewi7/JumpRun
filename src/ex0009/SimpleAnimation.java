@@ -41,7 +41,7 @@ public class SimpleAnimation {
         
         mexicanSprite = new MexicanSprite();
         mexicanSprite.setX(400);
-        mexicanSprite.setY(350);
+        mexicanSprite.setY(300);
         canvas = new Canvas();
 
         Music backgroundMusic = new Music();
@@ -65,6 +65,7 @@ public class SimpleAnimation {
     public void gameLoop() {
         while (!gameOver) {
             moveTrump();
+            moveMexicans();
             canvas.repaint();
             sleepATick();
         }
@@ -104,7 +105,12 @@ public class SimpleAnimation {
             }
         }
     }
-
+    
+    private void moveMexicans(){
+      mexicanSprite.setX(mexicanSprite.getX()-2);
+      
+    }
+    
     class PlayerKeystate implements KeyListener {
 
         public boolean isLeftPressed;  // TODO: Use getXXXX()

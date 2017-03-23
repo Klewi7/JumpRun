@@ -7,7 +7,7 @@ import java.io.IOException;
 public class MexicanSprite extends Sprite{
 
     public MexicanSprite() throws IOException {
-        super("LittleMexican.png");
+        super("LittleMexican1.png");
     }
  
     
