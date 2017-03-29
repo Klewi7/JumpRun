@@ -17,11 +17,12 @@ import javax.swing.JPanel;
 public class SimpleAnimation {
 
     private static final int TICK_IN_MILLISECOND = 1000 / 60;
-
+    
     private Canvas canvas;
     private boolean gameOver;
     private boolean trumpIsJumping;
     private int remainingTrumpJumpTicks;
+    private BufferedImage backgroundImage,wallImage;
     private PlayerKeystate playerKeystate;
     private TrumpSprite trumpSprite;
     private MexicanSprite mexicanSprite;
@@ -52,6 +53,7 @@ public class SimpleAnimation {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().add(canvas, BorderLayout.CENTER);
         frame.setTitle("Trump'n'Run");
+        canvas.background();
         frame.pack();
         frame.setVisible(true);
 
@@ -150,23 +152,38 @@ public class SimpleAnimation {
     }
 
     public class Canvas extends JPanel {
-
         private static final int HEIGHT = 600;
         private static final int WIDTH = 800;
 
         public Canvas() throws IOException {
             super();
-            
+           
             setPreferredSize(new Dimension(WIDTH, HEIGHT));
         }
 
         @Override
         protected void paintComponent(Graphics g) {
+            int wallPosition = 0;
             Graphics2D g2d = (Graphics2D) g;
             g2d.fillRect(0, 0, WIDTH, HEIGHT);
+            g2d.translate((-1)*(trumpSprite.getX()-200),0);
             int trumpDeltaY = (int) (-1.0 / 3 * Math.pow(remainingTrumpJumpTicks - 30, 2) + 300);
+            g2d.drawImage(backgroundImage, trumpSprite.getX()-300, 0, null);
+            
+            for(int i=0;i<50;i++){    
+            g2d.drawImage(wallImage,wallPosition,465, null);
+            wallPosition= wallPosition + 200;
+            }
+            
             g2d.drawImage(trumpSprite.getImage(), trumpSprite.getX(), trumpSprite.getY() - trumpDeltaY, null);
             g2d.drawImage(mexicanSprite.getImage(),mexicanSprite.getX() , mexicanSprite.getY(),null);
         }
+        private void background() throws IOException 
+    {
+    URL imageUrl = getClass().getResource("../images/Hintergrund.jpg");
+    backgroundImage = ImageIO.read(imageUrl); 
+    URL wallUrl = getClass().getResource("../images/GreatWall.png");
+    wallImage = ImageIO.read(wallUrl); 
+    }
     }
 }
