@@ -1,5 +1,6 @@
 package ex0009;
 
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -10,10 +11,13 @@ class Sprite {
     private int x;
     private int y;
     private BufferedImage image;
+    private Rectangle2D collisionRectangle;
 
-    public Sprite(String imageName) throws IOException {
+    public Sprite(String imageName, Rectangle2D newCollisionRectangle) throws IOException {
         URL imageUrl = getClass().getResource("../images/" + imageName);
         image = ImageIO.read(imageUrl);
+        
+        collisionRectangle = newCollisionRectangle;
     }
     public BufferedImage getImage() {
         return image;
@@ -39,4 +43,7 @@ class Sprite {
         return image.getWidth();
     }
 
-}
+    public Rectangle2D getCollisionRectangle() {
+        return collisionRectangle;
+    }
+    }

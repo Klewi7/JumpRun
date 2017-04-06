@@ -1,11 +1,13 @@
 package ex0009;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -157,12 +159,23 @@ public class SimpleAnimation {
         private static final int WIDTH = 800;
         private static final int WALL_Y = 465;
 
+        private boolean isDebug = true;
+
         public Canvas() throws IOException {
             super();
 
             setPreferredSize(new Dimension(WIDTH, HEIGHT));
         }
 
+        private void drawSpriteCollisionRectangle(Graphics2D g2d, Sprite sprite, int jumpDeltaY) {
+            Rectangle2D collisionRectangle = sprite.getCollisionRectangle();
+            g2d.drawRect(
+                    sprite.getX() + (int) collisionRectangle.getX() , 
+                    sprite.getY() + (int) collisionRectangle.getY() - jumpDeltaY,
+                    (int) collisionRectangle.getWidth(),
+                    (int) collisionRectangle.getHeight());
+        }
+        
         @Override
         protected void paintComponent(Graphics g) {
             Graphics2D g2d = (Graphics2D) g;
@@ -181,6 +194,11 @@ public class SimpleAnimation {
 
             g2d.drawImage(trumpSprite.getImage(), trumpSprite.getX(), trumpSprite.getY() - trumpDeltaY, null);
             g2d.drawImage(mexicanSprite.getImage(), mexicanSprite.getX(), mexicanSprite.getY(), null);
+            
+            g2d.setColor(Color.red);
+            drawSpriteCollisionRectangle(g2d, trumpSprite, trumpDeltaY);
+            drawSpriteCollisionRectangle(g2d, mexicanSprite, 0);
+            
         }
 
         private void background() throws IOException {
