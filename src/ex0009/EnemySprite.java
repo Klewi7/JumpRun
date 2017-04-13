@@ -18,9 +18,9 @@ private int kickHeight;
         super(imageName, newFailRectangle);
         kickHeight = newKickHeight;
     }
-
-    public int getKickHeight() {
-        return kickHeight;
-    }
+    
+    public double getBodyY(){
+        return getRelativeCollisionRectangle().getY() + kickHeight;
+    } 
     
 }

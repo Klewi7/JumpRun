@@ -27,6 +27,7 @@ public class SimpleAnimation {
     private PlayerKeystate playerKeystate;
     private TrumpSprite trumpSprite;
     private MexicanSprite mexicanSprite;
+    private boolean mexicanHasBeenKicked;
 
     public static void main(String[] args) throws IOException {
         SimpleAnimation ani = new SimpleAnimation();
@@ -67,7 +68,13 @@ public class SimpleAnimation {
 
     public void gameLoop() {
         while (!gameOver) {
-            gameOver = trumpSprite.isCollidingWith(mexicanSprite);
+            if (!mexicanHasBeenKicked && trumpSprite.isCollidingWith(mexicanSprite)) {
+                if (trumpSprite.isKicking(mexicanSprite)) {
+                    mexicanHasBeenKicked = true;
+                } else {
+                    gameOver = true;
+                }
+            }
             moveTrump();
             moveMexicans();
             canvas.repaint();
@@ -189,7 +196,9 @@ public class SimpleAnimation {
             }
 
             g2d.drawImage(trumpSprite.getImage(), trumpSprite.getX(), trumpSprite.getY(), null);
-            g2d.drawImage(mexicanSprite.getImage(), mexicanSprite.getX(), mexicanSprite.getY(), null);
+            if (!mexicanHasBeenKicked) {
+                g2d.drawImage(mexicanSprite.getImage(), mexicanSprite.getX(), mexicanSprite.getY(), null);
+            }
 
             g2d.setColor(Color.red);
             drawSpriteCollisionRectangle(g2d, trumpSprite);

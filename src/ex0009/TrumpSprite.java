@@ -40,5 +40,9 @@ public class TrumpSprite extends Sprite {
         return getRelativeCollisionRectangle().intersects(failRectangle);
     }
     
+    public boolean isKicking(EnemySprite enemySprite){
+        double footY = getRelativeCollisionRectangle().getY() + getRelativeCollisionRectangle().getHeight();
+        return isCollidingWith(enemySprite) && (footY < enemySprite.getBodyY());
+    }
 
 }
