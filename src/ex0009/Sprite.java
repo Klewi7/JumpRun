@@ -19,6 +19,17 @@ class Sprite {
         
         collisionRectangle = newCollisionRectangle;
     }
+    
+    public Rectangle2D getRelativeCollisionRectangle(){
+        return new Rectangle2D.Float(
+                getX() + (float) getCollisionRectangle().getX(),
+                getY() + (float) getCollisionRectangle().getY(),
+                (float) getCollisionRectangle().getWidth(),
+                (float) getCollisionRectangle().getHeight()
+        );
+        
+    }
+    
     public BufferedImage getImage() {
         return image;
     }

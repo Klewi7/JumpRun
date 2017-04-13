@@ -14,8 +14,8 @@ import java.io.IOException;
  */
 public class EnemySprite extends Sprite{
 private int kickHeight;
-    public EnemySprite(String imageName, Rectangle2D newCollisionRectangle, int newKickHeight) throws IOException {
-        super(imageName, newCollisionRectangle);
+    public EnemySprite(String imageName, Rectangle2D newFailRectangle, int newKickHeight) throws IOException {
+        super(imageName, newFailRectangle);
         kickHeight = newKickHeight;
     }
 

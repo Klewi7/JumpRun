@@ -22,7 +22,6 @@ public class SimpleAnimation {
 
     private Canvas canvas;
     private boolean gameOver;
-    private boolean trumpIsJumping;
     private int remainingTrumpJumpTicks;
     private BufferedImage backgroundImage, wallImage;
     private PlayerKeystate playerKeystate;
@@ -68,6 +67,7 @@ public class SimpleAnimation {
 
     public void gameLoop() {
         while (!gameOver) {
+            gameOver = trumpSprite.isCollidingWith(mexicanSprite);
             moveTrump();
             moveMexicans();
             canvas.repaint();
@@ -97,16 +97,13 @@ public class SimpleAnimation {
             }
         }
         if (playerKeystate.isJumpPressed) {
-            if (!trumpIsJumping) {
-                trumpIsJumping = true;
-                remainingTrumpJumpTicks = 60;
+            if (!trumpSprite.isJumping()) {
+                trumpSprite.setRemainingJumpTicks(60);
             }
         }
-        if (trumpIsJumping) {
-            remainingTrumpJumpTicks--;
-            if (remainingTrumpJumpTicks == 0) {
-                trumpIsJumping = false;
-            }
+        if (trumpSprite.isJumping()) {
+            trumpSprite.setRemainingJumpTicks(trumpSprite.getRemainingJumpTicks() - 1);
+
         }
     }
 
@@ -167,21 +164,20 @@ public class SimpleAnimation {
             setPreferredSize(new Dimension(WIDTH, HEIGHT));
         }
 
-        private void drawSpriteCollisionRectangle(Graphics2D g2d, Sprite sprite, int jumpDeltaY) {
-            Rectangle2D collisionRectangle = sprite.getCollisionRectangle();
+        private void drawSpriteCollisionRectangle(Graphics2D g2d, Sprite sprite) {
+            final Rectangle2D relativeCollisionRectangle = sprite.getRelativeCollisionRectangle();
             g2d.drawRect(
-                    sprite.getX() + (int) collisionRectangle.getX() , 
-                    sprite.getY() + (int) collisionRectangle.getY() - jumpDeltaY,
-                    (int) collisionRectangle.getWidth(),
-                    (int) collisionRectangle.getHeight());
+                    (int) relativeCollisionRectangle.getX(),
+                    (int) relativeCollisionRectangle.getY(),
+                    (int) relativeCollisionRectangle.getWidth(),
+                    (int) relativeCollisionRectangle.getHeight());
         }
-        
+
         @Override
         protected void paintComponent(Graphics g) {
             Graphics2D g2d = (Graphics2D) g;
             g2d.fillRect(0, 0, WIDTH, HEIGHT);
             g2d.translate((-1) * (trumpSprite.getX() - 200), 0);
-            int trumpDeltaY = (int) (-1.0 / 3 * Math.pow(remainingTrumpJumpTicks - 30, 2) + 300);
             g2d.drawImage(backgroundImage, trumpSprite.getX() - 300, 0, null);
 
             for (int i = -1; i < 50; i++) {
@@ -192,13 +188,13 @@ public class SimpleAnimation {
                 g2d.drawImage(wallImage, wallX, WALL_Y + wallImage.getHeight(), null);
             }
 
-            g2d.drawImage(trumpSprite.getImage(), trumpSprite.getX(), trumpSprite.getY() - trumpDeltaY, null);
+            g2d.drawImage(trumpSprite.getImage(), trumpSprite.getX(), trumpSprite.getY(), null);
             g2d.drawImage(mexicanSprite.getImage(), mexicanSprite.getX(), mexicanSprite.getY(), null);
-            
+
             g2d.setColor(Color.red);
-            drawSpriteCollisionRectangle(g2d, trumpSprite, trumpDeltaY);
-            drawSpriteCollisionRectangle(g2d, mexicanSprite, 0);
-            
+            drawSpriteCollisionRectangle(g2d, trumpSprite);
+            drawSpriteCollisionRectangle(g2d, mexicanSprite);
+
         }
 
         private void background() throws IOException {
